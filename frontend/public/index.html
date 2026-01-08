@@ -347,6 +347,104 @@
             font-weight: 600;
         }
 
+        /* Testimonials Section */
+        .testimonials {
+            padding: 80px 0;
+            background: var(--white);
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .testimonial-card {
+            background: var(--bg-light);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .testimonial-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .testimonial-avatar {
+            font-size: 3rem;
+            color: var(--accent-color);
+        }
+
+        .testimonial-info h4 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.3rem;
+        }
+
+        .testimonial-info p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .verified-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            color: var(--accent-color);
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .verified-badge i {
+            font-size: 1rem;
+        }
+
+        .testimonial-content {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 10px;
+        }
+
+        .stars {
+            color: #f59e0b;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+
+        .testimonial-content p {
+            color: var(--text-color);
+            line-height: 1.7;
+            font-style: italic;
+        }
+
+        .partner-badges {
+            margin-top: 4rem;
+            text-align: center;
+            padding-top: 3rem;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .partner-badges h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+        }
+
         .badges {
             display: flex;
             justify-content: center;
