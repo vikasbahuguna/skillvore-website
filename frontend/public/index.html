@@ -194,6 +194,33 @@
             box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
         }
 
+        .theme-toggle {
+            background: var(--bg-light);
+            border: 2px solid var(--accent-color);
+            color: var(--accent-color);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+            margin-left: 1rem;
+        }
+
+        .theme-toggle:hover {
+            background: var(--accent-color);
+            color: var(--white);
+            transform: rotate(180deg) scale(1.1);
+            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.4);
+        }
+
+        body.dark-mode .theme-toggle {
+            background: #1e293b;
+        }
+
         .mobile-menu {
             display: none;
             flex-direction: column;
