@@ -1407,6 +1407,76 @@
         </div>
     </footer>
 
+    <!-- Waitlist Modal -->
+    <div class="modal-overlay" id="waitlistModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeWaitlistModal()">&times;</button>
+            <div class="modal-header">
+                <h2>Join Our Waitlist</h2>
+                <p>Get early access to AI agents that transform your business</p>
+            </div>
+            
+            <div id="formMessage"></div>
+            
+            <form id="waitlistForm" onsubmit="submitWaitlist(event)">
+                <div class="form-group">
+                    <label for="fullName">Full Name <span class="required">*</span></label>
+                    <input 
+                        type="text" 
+                        id="fullName" 
+                        name="fullName" 
+                        required 
+                        placeholder="Enter your full name"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="workEmail">Work Email <span class="required">*</span></label>
+                    <input 
+                        type="email" 
+                        id="workEmail" 
+                        name="workEmail" 
+                        required 
+                        placeholder="you@company.com"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="companyName">Company Name <span class="required">*</span></label>
+                    <input 
+                        type="text" 
+                        id="companyName" 
+                        name="companyName" 
+                        required 
+                        placeholder="Your company name"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="businessType">Business Type <span class="required">*</span></label>
+                    <select id="businessType" name="businessType" required>
+                        <option value="">Select your business type</option>
+                        <option value="Retail & D2C">Retail & D2C</option>
+                        <option value="E-commerce Sellers">E-commerce Sellers</option>
+                        <option value="Logistics & Supply Chain">Logistics & Supply Chain</option>
+                        <option value="Manufacturing & Distribution">Manufacturing & Distribution</option>
+                        <option value="Professional Services">Professional Services</option>
+                        <option value="Healthcare">Healthcare</option>
+                        <option value="Education & Training">Education & Training</option>
+                        <option value="Real Estate & Construction">Real Estate & Construction</option>
+                        <option value="Food & Hospitality">Food & Hospitality</option>
+                        <option value="Agriculture & Food Processing">Agriculture & Food Processing</option>
+                        <option value="Other MSME">Other MSME</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    Join Waitlist
+                </button>
+            </form>
+        </div>
+    </div>
+
     <script>
         // Mobile menu toggle
         function toggleMenu() {
