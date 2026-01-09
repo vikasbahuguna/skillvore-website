@@ -181,6 +181,178 @@ async def get_all_waitlist():
             detail="Failed to get waitlist entries"
         )
 
+@app.get("/admin/dashboard")
+async def admin_dashboard():
+    """Simple HTML dashboard to view waitlist data"""
+    from fastapi.responses import HTMLResponse
+    
+    try:
+        collection = get_database()
+        entries = list(collection.find().sort("created_at", -1))
+        
+        # Build HTML
+        html = """
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Waitlist Dashboard</title>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    margin: 20px;
+                    background: #f5f5f5;
+                }
+                .container {
+                    max-width: 1200px;
+                    margin: 0 auto;
+                    background: white;
+                    padding: 30px;
+                    border-radius: 10px;
+                    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                }
+                h1 {
+                    color: #1a365d;
+                    border-bottom: 3px solid #00d4ff;
+                    padding-bottom: 10px;
+                }
+                .stats {
+                    display: flex;
+                    gap: 20px;
+                    margin: 20px 0;
+                }
+                .stat-box {
+                    background: #00d4ff;
+                    color: white;
+                    padding: 20px;
+                    border-radius: 8px;
+                    flex: 1;
+                    text-align: center;
+                }
+                .stat-box h3 {
+                    margin: 0;
+                    font-size: 2rem;
+                }
+                .stat-box p {
+                    margin: 5px 0 0 0;
+                }
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin-top: 20px;
+                }
+                th {
+                    background: #1a365d;
+                    color: white;
+                    padding: 12px;
+                    text-align: left;
+                }
+                td {
+                    padding: 12px;
+                    border-bottom: 1px solid #ddd;
+                }
+                tr:hover {
+                    background: #f9f9f9;
+                }
+                .export-btn {
+                    background: #00d4ff;
+                    color: white;
+                    padding: 10px 20px;
+                    border: none;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    margin: 10px 5px;
+                    text-decoration: none;
+                    display: inline-block;
+                }
+                .export-btn:hover {
+                    background: #00b8db;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <h1>📊 Waitlist Dashboard</h1>
+                
+                <div class="stats">
+                    <div class="stat-box">
+                        <h3>{count}</h3>
+                        <p>Total Signups</p>
+                    </div>
+                    <div class="stat-box">
+                        <h3>{today_count}</h3>
+                        <p>Today</p>
+                    </div>
+                </div>
+                
+                <div>
+                    <a href="/api/waitlist/all" class="export-btn" target="_blank">📥 Export JSON</a>
+                    <button onclick="exportCSV()" class="export-btn">📊 Export CSV</button>
+                </div>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Company</th>
+                            <th>Business Type</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+        """.format(
+            count=len(entries),
+            today_count=collection.count_documents({
+                "created_at": {"$gte": datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)}
+            })
+        )
+        
+        # Add table rows
+        for i, entry in enumerate(entries, 1):
+            html += f"""
+                        <tr>
+                            <td>{i}</td>
+                            <td>{entry['full_name']}</td>
+                            <td>{entry['work_email']}</td>
+                            <td>{entry['company_name']}</td>
+                            <td>{entry['business_type']}</td>
+                            <td>{entry['created_at'].strftime('%Y-%m-%d %H:%M')}</td>
+                        </tr>
+            """
+        
+        html += """
+                    </tbody>
+                </table>
+                
+                <script>
+                async function exportCSV() {
+                    const response = await fetch('/api/waitlist/all');
+                    const data = await response.json();
+                    
+                    let csv = 'Name,Email,Company,Business Type,Date\\n';
+                    data.entries.forEach(entry => {
+                        csv += `"${entry.full_name}","${entry.work_email}","${entry.company_name}","${entry.business_type}","${entry.created_at}"\\n`;
+                    });
+                    
+                    const blob = new Blob([csv], { type: 'text/csv' });
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'waitlist_' + new Date().toISOString().split('T')[0] + '.csv';
+                    a.click();
+                }
+                </script>
+            </div>
+        </body>
+        </html>
+        """
+        
+        return HTMLResponse(content=html)
+        
+    except Exception as e:
+        return HTMLResponse(content=f"<h1>Error loading dashboard: {str(e)}</h1>", status_code=500)
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8001)
