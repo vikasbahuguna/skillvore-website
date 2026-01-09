@@ -1,0 +1,15 @@
+{
+  "name": "skillvore-netlify-functions",
+  "version": "1.0.0",
+  "description": "Serverless functions for SkillVore waitlist",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["netlify", "serverless", "mongodb"],
+  "author": "SkillVore",
+  "license": "MIT",
+  "dependencies": {
+    "mongodb": "^6.3.0"
+  }
+}
