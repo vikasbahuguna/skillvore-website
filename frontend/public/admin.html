@@ -287,7 +287,7 @@
             table.style.display = 'none';
 
             try {
-                const response = await fetch('/api/waitlist/all');
+                const response = await fetch('/.netlify/functions/waitlist-all');
                 
                 if (!response.ok) {
                     throw new Error('Failed to load data');
