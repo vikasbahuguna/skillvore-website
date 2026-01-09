@@ -1,0 +1,20 @@
+[
+  {
+    "_id": "69611136bfebc2815af34f23",
+    "full_name": "Test User",
+    "work_email": "test@example.com",
+    "company_name": "Test Company",
+    "business_type": "E-commerce Sellers",
+    "created_at": "2026-01-09T14:31:18.846000",
+    "updated_at": "2026-01-09T14:31:18.846000"
+  },
+  {
+    "_id": "69611207bfebc2815af34f25",
+    "full_name": "vikas bahuguna",
+    "work_email": "info@skillvore.com",
+    "company_name": "Skillvore",
+    "business_type": "Retail & D2C",
+    "created_at": "2026-01-09T14:34:47.205000",
+    "updated_at": "2026-01-09T14:34:47.205000"
+  }
+]
