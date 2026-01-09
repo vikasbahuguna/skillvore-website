@@ -1478,6 +1478,114 @@
     </div>
 
     <script>
+        // Waitlist Modal Functions
+        function openWaitlistModal() {
+            document.getElementById('waitlistModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeWaitlistModal() {
+            document.getElementById('waitlistModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+            // Reset form
+            document.getElementById('waitlistForm').reset();
+            document.getElementById('formMessage').innerHTML = '';
+        }
+
+        // Close modal on overlay click
+        document.getElementById('waitlistModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeWaitlistModal();
+            }
+        });
+
+        // Close modal on escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeWaitlistModal();
+            }
+        });
+
+        // Form submission
+        async function submitWaitlist(event) {
+            event.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const formMessage = document.getElementById('formMessage');
+            
+            // Get form data
+            const formData = {
+                full_name: document.getElementById('fullName').value.trim(),
+                work_email: document.getElementById('workEmail').value.trim(),
+                company_name: document.getElementById('companyName').value.trim(),
+                business_type: document.getElementById('businessType').value
+            };
+            
+            // Disable button and show loading
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="loading-spinner"></span>Submitting...';
+            formMessage.innerHTML = '';
+            
+            try {
+                const response = await fetch('http://localhost:8001/api/waitlist', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // Success
+                    formMessage.innerHTML = `
+                        <div class="form-message success">
+                            <i class="fas fa-check-circle"></i>
+                            ${data.message || 'Successfully joined the waitlist!'}
+                        </div>
+                    `;
+                    document.getElementById('waitlistForm').reset();
+                    
+                    // Close modal after 2 seconds
+                    setTimeout(() => {
+                        closeWaitlistModal();
+                    }, 2000);
+                } else {
+                    // Error from server
+                    formMessage.innerHTML = `
+                        <div class="form-message error">
+                            <i class="fas fa-exclamation-circle"></i>
+                            ${data.detail || 'Failed to join waitlist. Please try again.'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                formMessage.innerHTML = `
+                    <div class="form-message error">
+                        <i class="fas fa-exclamation-circle"></i>
+                        Network error. Please check your connection and try again.
+                    </div>
+                `;
+            } finally {
+                // Re-enable button
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Join Waitlist';
+            }
+        }
+
+        // Update all "Join Waitlist" links to open modal
+        document.addEventListener('DOMContentLoaded', function() {
+            const waitlistLinks = document.querySelectorAll('a[href="#waitlist"]');
+            waitlistLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    openWaitlistModal();
+                });
+            });
+        });
+
         // Mobile menu toggle
         function toggleMenu() {
             const navLinks = document.querySelector('.nav-links');
