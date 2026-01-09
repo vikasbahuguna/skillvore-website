@@ -1,9 +1,10 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel, EmailStr
-import psycopg2
-from psycopg2.extras import RealDictCursor
+from pydantic import BaseModel, EmailStr, Field
+from pymongo import MongoClient, ASCENDING
+from pymongo.errors import DuplicateKeyError
 from datetime import datetime
+from typing import Optional
 import os
 
 app = FastAPI()
@@ -17,122 +18,111 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# PostgreSQL connection configuration from Hostinger
-DB_CONFIG = {
-    "host": "72.60.97.209",
-    "port": 5432,
-    "database": "n8n_test_db",
-    "user": "n8n_user",
-    "password": os.environ.get("DB_PASSWORD", "")  # Will be set via environment variable
-}
+# MongoDB connection - using local MongoDB
+MONGO_URL = os.environ.get("MONGO_URL", "mongodb://localhost:27017/")
+DB_NAME = "skillvore_db"
+COLLECTION_NAME = "waitlist_signups"
+
+# Global MongoDB client
+mongo_client = None
+db = None
+collection = None
+
+def get_database():
+    """Get MongoDB database connection"""
+    global mongo_client, db, collection
+    
+    if mongo_client is None:
+        try:
+            mongo_client = MongoClient(MONGO_URL)
+            db = mongo_client[DB_NAME]
+            collection = db[COLLECTION_NAME]
+            
+            # Create unique index on email
+            collection.create_index([("work_email", ASCENDING)], unique=True)
+            
+            print(f"✅ Connected to MongoDB: {DB_NAME}")
+        except Exception as e:
+            print(f"❌ MongoDB connection error: {e}")
+            raise HTTPException(status_code=500, detail="Database connection failed")
+    
+    return collection
 
 class WaitlistEntry(BaseModel):
-    full_name: str
+    full_name: str = Field(..., min_length=1, max_length=255)
     work_email: EmailStr
-    company_name: str
-    business_type: str
+    company_name: str = Field(..., min_length=1, max_length=255)
+    business_type: str = Field(..., min_length=1, max_length=100)
 
-def get_db_connection():
-    """Create and return a database connection"""
-    try:
-        conn = psycopg2.connect(**DB_CONFIG)
-        return conn
-    except Exception as e:
-        print(f"Database connection error: {e}")
-        raise HTTPException(status_code=500, detail="Database connection failed")
-
-def init_database():
-    """Initialize the database table if it doesn't exist"""
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        
-        # Create waitlist table
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS waitlist_signups (
-                id SERIAL PRIMARY KEY,
-                full_name VARCHAR(255) NOT NULL,
-                work_email VARCHAR(255) UNIQUE NOT NULL,
-                company_name VARCHAR(255) NOT NULL,
-                business_type VARCHAR(100) NOT NULL,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                ip_address VARCHAR(45),
-                user_agent TEXT
-            );
-        """)
-        
-        # Create index on email for faster lookups
-        cursor.execute("""
-            CREATE INDEX IF NOT EXISTS idx_waitlist_email 
-            ON waitlist_signups(work_email);
-        """)
-        
-        conn.commit()
-        cursor.close()
-        conn.close()
-        print("Database initialized successfully")
-    except Exception as e:
-        print(f"Database initialization error: {e}")
+class WaitlistResponse(BaseModel):
+    success: bool
+    message: str
+    id: Optional[str] = None
+    created_at: Optional[str] = None
 
 @app.on_event("startup")
 async def startup_event():
     """Initialize database on startup"""
-    init_database()
+    get_database()
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    """Close MongoDB connection on shutdown"""
+    global mongo_client
+    if mongo_client:
+        mongo_client.close()
+        print("MongoDB connection closed")
 
 @app.get("/api/health")
 async def health_check():
     """Health check endpoint"""
-    return {"status": "healthy", "service": "waitlist-api"}
+    try:
+        # Ping MongoDB to check connection
+        mongo_client.admin.command('ping')
+        return {
+            "status": "healthy",
+            "service": "waitlist-api",
+            "database": "connected"
+        }
+    except Exception as e:
+        return {
+            "status": "unhealthy",
+            "service": "waitlist-api",
+            "database": "disconnected",
+            "error": str(e)
+        }
 
-@app.post("/api/waitlist")
+@app.post("/api/waitlist", response_model=WaitlistResponse)
 async def submit_waitlist(entry: WaitlistEntry):
     """Submit a new waitlist entry"""
     try:
-        conn = get_db_connection()
-        cursor = conn.cursor(cursor_factory=RealDictCursor)
+        collection = get_database()
         
-        # Check if email already exists
-        cursor.execute(
-            "SELECT id FROM waitlist_signups WHERE work_email = %s",
-            (entry.work_email,)
-        )
-        existing = cursor.fetchone()
-        
-        if existing:
-            cursor.close()
-            conn.close()
-            raise HTTPException(
-                status_code=400,
-                detail="This email is already registered in our waitlist"
-            )
-        
-        # Insert new entry
-        cursor.execute("""
-            INSERT INTO waitlist_signups 
-            (full_name, work_email, company_name, business_type)
-            VALUES (%s, %s, %s, %s)
-            RETURNING id, created_at
-        """, (
-            entry.full_name,
-            entry.work_email,
-            entry.company_name,
-            entry.business_type
-        ))
-        
-        result = cursor.fetchone()
-        conn.commit()
-        cursor.close()
-        conn.close()
-        
-        return {
-            "success": True,
-            "message": "Successfully joined the waitlist!",
-            "id": result['id'],
-            "created_at": result['created_at'].isoformat()
+        # Prepare document
+        document = {
+            "full_name": entry.full_name,
+            "work_email": entry.work_email.lower(),  # Store email in lowercase
+            "company_name": entry.company_name,
+            "business_type": entry.business_type,
+            "created_at": datetime.utcnow(),
+            "updated_at": datetime.utcnow()
         }
         
-    except HTTPException:
-        raise
+        # Insert document
+        result = collection.insert_one(document)
+        
+        return WaitlistResponse(
+            success=True,
+            message="Successfully joined the waitlist! We'll be in touch soon.",
+            id=str(result.inserted_id),
+            created_at=document["created_at"].isoformat()
+        )
+        
+    except DuplicateKeyError:
+        raise HTTPException(
+            status_code=400,
+            detail="This email is already registered in our waitlist."
+        )
     except Exception as e:
         print(f"Error submitting waitlist entry: {e}")
         raise HTTPException(
@@ -144,20 +134,52 @@ async def submit_waitlist(entry: WaitlistEntry):
 async def get_waitlist_count():
     """Get total number of waitlist signups"""
     try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
+        collection = get_database()
+        count = collection.count_documents({})
         
-        cursor.execute("SELECT COUNT(*) FROM waitlist_signups")
-        count = cursor.fetchone()[0]
-        
-        cursor.close()
-        conn.close()
-        
-        return {"count": count}
+        return {
+            "success": True,
+            "count": count
+        }
         
     except Exception as e:
         print(f"Error getting waitlist count: {e}")
-        raise HTTPException(status_code=500, detail="Failed to get waitlist count")
+        raise HTTPException(
+            status_code=500,
+            detail="Failed to get waitlist count"
+        )
+
+@app.get("/api/waitlist/all")
+async def get_all_waitlist():
+    """Get all waitlist entries (for admin use)"""
+    try:
+        collection = get_database()
+        
+        # Get all documents, sorted by most recent first
+        entries = list(collection.find(
+            {},
+            {"_id": 0}  # Exclude MongoDB _id from response
+        ).sort("created_at", -1))
+        
+        # Convert datetime to string for JSON serialization
+        for entry in entries:
+            if "created_at" in entry:
+                entry["created_at"] = entry["created_at"].isoformat()
+            if "updated_at" in entry:
+                entry["updated_at"] = entry["updated_at"].isoformat()
+        
+        return {
+            "success": True,
+            "count": len(entries),
+            "entries": entries
+        }
+        
+    except Exception as e:
+        print(f"Error getting waitlist entries: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail="Failed to get waitlist entries"
+        )
 
 if __name__ == "__main__":
     import uvicorn
