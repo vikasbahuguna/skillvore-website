@@ -1527,7 +1527,7 @@
             formMessage.innerHTML = '';
             
             try {
-                const response = await fetch('/api/waitlist', {
+                const response = await fetch('/.netlify/functions/waitlist', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
