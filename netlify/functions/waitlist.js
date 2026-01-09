@@ -17,6 +17,9 @@ async function connectToDatabase() {
   const client = await MongoClient.connect(MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    tls: true,
+    tlsAllowInvalidCertificates: false,
+    serverSelectionTimeoutMS: 5000,
   });
 
   const db = client.db(DB_NAME);
