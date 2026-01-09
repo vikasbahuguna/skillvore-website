@@ -1,0 +1,8 @@
+{
+  "name": "skillvore-functions",
+  "version": "1.0.0",
+  "description": "Netlify Functions for SkillVore",
+  "dependencies": {
+    "mongodb": "^6.0.0"
+  }
+}
