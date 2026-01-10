@@ -1698,6 +1698,19 @@
             document.getElementById('formMessage').innerHTML = '';
         }
 
+        // Roadmap Modal Functions
+        function openRoadmapModal() {
+            document.getElementById('roadmapModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeRoadmapModal() {
+            document.getElementById('roadmapModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+            document.getElementById('roadmapForm').reset();
+            document.getElementById('roadmapFormMessage').innerHTML = '';
+        }
+
         // Close modal on overlay click
         document.getElementById('waitlistModal').addEventListener('click', function(e) {
             if (e.target === this) {
@@ -1705,10 +1718,17 @@
             }
         });
 
+        document.getElementById('roadmapModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeRoadmapModal();
+            }
+        });
+
         // Close modal on escape key
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 closeWaitlistModal();
+                closeRoadmapModal();
             }
         });
 
