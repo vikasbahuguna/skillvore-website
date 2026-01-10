@@ -1477,6 +1477,181 @@
         </div>
     </div>
 
+    <!-- Roadmap Booking Modal -->
+    <div class="modal-overlay" id="roadmapModal">
+        <div class="modal-content" style="max-width: 650px;">
+            <button class="modal-close" onclick="closeRoadmapModal()">&times;</button>
+            <div class="modal-header">
+                <h2>Book Your 15-Min AI Roadmap</h2>
+                <p>Let's identify the perfect AI solution for your business</p>
+            </div>
+            
+            <div id="roadmapFormMessage"></div>
+            
+            <form id="roadmapForm" onsubmit="submitRoadmap(event)">
+                <!-- Section 1: Contact Info -->
+                <div style="margin-bottom: 2rem;">
+                    <h3 style="color: var(--primary-color); font-size: 1.2rem; margin-bottom: 1rem; border-bottom: 2px solid var(--accent-color); padding-bottom: 0.5rem;">
+                        📞 Contact Information
+                    </h3>
+                    
+                    <div class="form-group">
+                        <label for="rmFullName">Full Name <span class="required">*</span></label>
+                        <input type="text" id="rmFullName" required placeholder="Enter your full name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="rmWorkEmail">Work Email <span class="required">*</span></label>
+                        <input type="email" id="rmWorkEmail" required placeholder="you@company.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="rmPhone">Phone Number <span class="required">*</span></label>
+                        <input type="tel" id="rmPhone" required placeholder="+91 98765 43210">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="rmCompany">Company Name <span class="required">*</span></label>
+                        <input type="text" id="rmCompany" required placeholder="Your company name">
+                    </div>
+                </div>
+
+                <!-- Section 2: Business Context -->
+                <div style="margin-bottom: 2rem;">
+                    <h3 style="color: var(--primary-color); font-size: 1.2rem; margin-bottom: 1rem; border-bottom: 2px solid var(--accent-color); padding-bottom: 0.5rem;">
+                        🏢 Business Context
+                    </h3>
+                    
+                    <div class="form-group">
+                        <label for="rmCompanySize">Company Size</label>
+                        <select id="rmCompanySize">
+                            <option value="">Select company size</option>
+                            <option value="1-5">1–5 employees</option>
+                            <option value="6-20">6–20 employees</option>
+                            <option value="21-50">21–50 employees</option>
+                            <option value="50+">50+ employees</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="rmRole">Your Role</label>
+                        <select id="rmRole">
+                            <option value="">Select your role</option>
+                            <option value="Founder / Owner">Founder / Owner</option>
+                            <option value="Operations">Operations</option>
+                            <option value="Sales / Marketing">Sales / Marketing</option>
+                            <option value="Finance">Finance</option>
+                            <option value="IT">IT</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Section 3: Pain Discovery -->
+                <div style="margin-bottom: 2rem;">
+                    <h3 style="color: var(--primary-color); font-size: 1.2rem; margin-bottom: 1rem; border-bottom: 2px solid var(--accent-color); padding-bottom: 0.5rem;">
+                        🎯 What are you struggling with most?
+                    </h3>
+                    <p style="font-size: 0.9rem; color: var(--text-light); margin-bottom: 1rem;">Select all that apply</p>
+                    
+                    <div style="display: grid; gap: 0.8rem;">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="painPoints" value="fake_low_quality_leads">
+                            <span>❌ Too many low-quality or fake leads</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="painPoints" value="repetitive_questions">
+                            <span>📞 Customers asking repetitive questions</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="painPoints" value="payment_followups">
+                            <span>💸 Delayed payments & constant follow-ups</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="painPoints" value="supplier_coordination">
+                            <span>🚚 Poor coordination with suppliers & delivery partners</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="painPoints" value="inventory_issues">
+                            <span>📦 Stock mismatch, overstocking, or frequent stock-outs</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="painPoints" value="high_rto">
+                            <span>🔁 High RTOs & failed deliveries</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="painPoints" value="manual_data_entry">
+                            <span>🧾 Too much manual data entry across tools</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="painPoints" value="compliance_confusion">
+                            <span>⚖️ Payment, GST, or compliance confusion</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="painPoints" value="slow_response_loss">
+                            <span>📉 Losing customers due to slow responses</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="painPoints" value="offline_operations">
+                            <span>🕒 Operations stop when my team is offline</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Section 4: AI Help Area -->
+                <div style="margin-bottom: 2rem;">
+                    <h3 style="color: var(--primary-color); font-size: 1.2rem; margin-bottom: 1rem; border-bottom: 2px solid var(--accent-color); padding-bottom: 0.5rem;">
+                        🚀 Where do you want AI to help first?
+                    </h3>
+                    
+                    <div class="form-group">
+                        <select id="rmAiArea" style="font-size: 1rem;">
+                            <option value="">Select priority area</option>
+                            <option value="sales_lead_qualification">🚀 Sales & Lead Qualification</option>
+                            <option value="customer_support">🤝 Customer Support & Operations</option>
+                            <option value="payments_compliance">💳 Payments, Follow-ups & Compliance</option>
+                            <option value="supply_chain">🚛 Supply Chain, Inventory & Logistics</option>
+                            <option value="not_sure">🤔 Not sure — guide me</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Section 5: Qualification -->
+                <div style="margin-bottom: 2rem;">
+                    <h3 style="color: var(--primary-color); font-size: 1.2rem; margin-bottom: 1rem; border-bottom: 2px solid var(--accent-color); padding-bottom: 0.5rem;">
+                        📅 Timeline & Tools
+                    </h3>
+                    
+                    <div class="form-group">
+                        <label for="rmTimeline">Timeline to start</label>
+                        <select id="rmTimeline">
+                            <option value="">Select timeline</option>
+                            <option value="Immediately">Immediately</option>
+                            <option value="Next 1-3 months">Next 1–3 months</option>
+                            <option value="Just exploring">Just exploring</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="rmTools">Current Tools (Optional)</label>
+                        <input 
+                            type="text" 
+                            id="rmTools" 
+                            placeholder="e.g., Shopify, Zoho, Tally, WhatsApp, CRM"
+                        >
+                        <small style="color: var(--text-light); font-size: 0.85rem; display: block; margin-top: 0.3rem;">
+                            This helps us prepare better recommendations
+                        </small>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn" id="roadmapSubmitBtn">
+                    Book My AI Roadmap Session
+                </button>
+            </form>
+        </div>
+    </div>
+
     <script>
         // Waitlist Modal Functions
         function openWaitlistModal() {
