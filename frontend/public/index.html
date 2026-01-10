@@ -1711,6 +1711,24 @@
             document.getElementById('roadmapFormMessage').innerHTML = '';
         }
 
+        // Scroll to Video Function
+        function scrollToVideo() {
+            const videoElement = document.getElementById('demoVideo');
+            if (videoElement) {
+                videoElement.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+                
+                // Add a subtle highlight effect
+                videoElement.style.transition = 'transform 0.3s ease';
+                videoElement.style.transform = 'scale(1.02)';
+                setTimeout(() => {
+                    videoElement.style.transform = 'scale(1)';
+                }, 300);
+            }
+        }
+
         // Close modal on overlay click
         document.getElementById('waitlistModal').addEventListener('click', function(e) {
             if (e.target === this) {
