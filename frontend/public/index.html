@@ -534,51 +534,44 @@
             transition: all 0.3s ease;
             position: relative;
             cursor: pointer;
-            overflow: visible;
+            border: 2px solid transparent;
+            background-image: 
+                linear-gradient(var(--white), var(--white)),
+                linear-gradient(90deg, var(--accent-color), #00b8db, var(--accent-color));
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+            animation: borderRotate 3s linear infinite;
         }
 
-        .benefit-card::before {
-            content: '';
-            position: absolute;
-            inset: -3px;
-            border-radius: 15px;
-            padding: 3px;
-            background: linear-gradient(
-                45deg,
-                var(--accent-color),
-                transparent,
-                var(--accent-color),
-                transparent,
-                var(--accent-color)
-            );
-            background-size: 300% 300%;
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            animation: rotateBorder 4s linear infinite;
-            opacity: 0.8;
-        }
-
-        @keyframes rotateBorder {
+        @keyframes borderRotate {
             0% {
-                background-position: 0% 50%;
+                filter: hue-rotate(0deg) brightness(1);
             }
             50% {
-                background-position: 100% 50%;
+                filter: hue-rotate(20deg) brightness(1.2);
             }
             100% {
-                background-position: 0% 50%;
+                filter: hue-rotate(0deg) brightness(1);
             }
         }
 
         .benefit-card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 15px 40px rgba(0, 212, 255, 0.3);
+            animation: borderRotate 1.5s linear infinite, cardGlow 1.5s ease-in-out infinite;
         }
 
-        .benefit-card:hover::before {
-            opacity: 1;
-            animation: rotateBorder 2s linear infinite;
+        @keyframes cardGlow {
+            0%, 100% {
+                box-shadow: 
+                    0 15px 40px rgba(0, 212, 255, 0.3),
+                    0 0 20px rgba(0, 212, 255, 0.4);
+            }
+            50% {
+                box-shadow: 
+                    0 15px 40px rgba(0, 212, 255, 0.5),
+                    0 0 30px rgba(0, 212, 255, 0.6);
+            }
         }
 
         .benefit-card:hover {
