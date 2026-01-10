@@ -1790,7 +1790,115 @@
                     openWaitlistModal();
                 });
             });
+
+            // Add event listeners for roadmap modal
+            const roadmapLinks = document.querySelectorAll('a[href="#audit"]');
+            roadmapLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    openRoadmapModal();
+                });
+            });
         });
+
+        // Roadmap Modal Functions
+        function openRoadmapModal() {
+            document.getElementById('roadmapModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeRoadmapModal() {
+            document.getElementById('roadmapModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+            document.getElementById('roadmapForm').reset();
+            document.getElementById('roadmapFormMessage').innerHTML = '';
+        }
+
+        // Close roadmap modal on overlay click
+        document.getElementById('roadmapModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeRoadmapModal();
+            }
+        });
+
+        // Roadmap form submission
+        async function submitRoadmap(event) {
+            event.preventDefault();
+            
+            const submitBtn = document.getElementById('roadmapSubmitBtn');
+            const formMessage = document.getElementById('roadmapFormMessage');
+            
+            // Get form data
+            const painPointsCheckboxes = document.querySelectorAll('input[name="painPoints"]:checked');
+            const painPoints = Array.from(painPointsCheckboxes).map(cb => cb.value);
+            
+            const formData = {
+                full_name: document.getElementById('rmFullName').value.trim(),
+                work_email: document.getElementById('rmWorkEmail').value.trim(),
+                phone_number: document.getElementById('rmPhone').value.trim(),
+                company_name: document.getElementById('rmCompany').value.trim(),
+                company_size: document.getElementById('rmCompanySize').value,
+                role: document.getElementById('rmRole').value,
+                pain_points: painPoints,
+                ai_help_area: document.getElementById('rmAiArea').value,
+                timeline: document.getElementById('rmTimeline').value,
+                current_tools: document.getElementById('rmTools').value.trim(),
+            };
+            
+            // Disable button and show loading
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="loading-spinner"></span>Submitting...';
+            formMessage.innerHTML = '';
+            
+            try {
+                const response = await fetch('/.netlify/functions/roadmap-booking', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // Success
+                    formMessage.innerHTML = `
+                        <div class="form-message success">
+                            <i class="fas fa-check-circle"></i>
+                            ${data.message || 'Successfully booked your AI Roadmap session!'}
+                            ${data.top_priority_agent ? `<br><small>Recommended: ${data.top_priority_agent}</small>` : ''}
+                        </div>
+                    `;
+                    document.getElementById('roadmapForm').reset();
+                    
+                    // Close modal after 3 seconds
+                    setTimeout(() => {
+                        closeRoadmapModal();
+                    }, 3000);
+                } else {
+                    // Error from server
+                    formMessage.innerHTML = `
+                        <div class="form-message error">
+                            <i class="fas fa-exclamation-circle"></i>
+                            ${data.detail || 'Failed to submit booking. Please try again.'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                formMessage.innerHTML = `
+                    <div class="form-message error">
+                        <i class="fas fa-exclamation-circle"></i>
+                        Network error. Please check your connection and try again.
+                    </div>
+                `;
+            } finally {
+                // Re-enable button
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Book My AI Roadmap Session';
+            }
+        }
 
         // Mobile menu toggle
         function toggleMenu() {
