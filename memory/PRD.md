@@ -25,7 +25,7 @@ Build a landing page for "SkillVore" - a company that transforms manual workflow
 - [x] "Book 15-min AI Roadmap" multi-step form modal (collects detailed business information)
 
 #### UI/UX
-- [x] Custom "Circuit Brain" SVG logo in navigation bar (Dec 2024)
+- [x] Custom "Circuit Brain" SVG logo in navigation bar with continuous glowing animation (Dec 2024)
 - [x] Animated glowing borders on hero headline and benefit cards
 - [x] Stylized icons replacing checkmarks in hero section
 - [x] Smooth scrolling within modals on form submission
