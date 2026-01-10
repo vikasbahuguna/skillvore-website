@@ -227,10 +227,29 @@
             backdrop-filter: blur(10px);
             padding: 2rem 2.5rem;
             border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
             transition: all 0.4s ease;
             cursor: pointer;
+            position: relative;
+            border: 2px solid transparent;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.15)),
+                linear-gradient(90deg, var(--accent-color), #00b8db, var(--accent-color));
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+            animation: heroGlowBorder 3s linear infinite;
+        }
+
+        @keyframes heroGlowBorder {
+            0% {
+                filter: hue-rotate(0deg) brightness(1) drop-shadow(0 0 10px rgba(0, 212, 255, 0.5));
+            }
+            50% {
+                filter: hue-rotate(20deg) brightness(1.2) drop-shadow(0 0 20px rgba(0, 212, 255, 0.8));
+            }
+            100% {
+                filter: hue-rotate(0deg) brightness(1) drop-shadow(0 0 10px rgba(0, 212, 255, 0.5));
+            }
         }
 
         .hero h1:hover {
@@ -238,9 +257,7 @@
             backdrop-filter: blur(15px);
             transform: translateY(-10px) scale(1.02);
             box-shadow: 0 15px 50px rgba(0, 212, 255, 0.4);
-            border: 1px solid rgba(0, 212, 255, 0.5);
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 
-                         2px 2px 4px rgba(0, 0, 0, 0.3);
+            animation: heroGlowBorder 1.5s linear infinite;
         }
 
         .hero h2 {
@@ -532,9 +549,46 @@
             border-radius: 15px;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
-            border-top: 4px solid var(--accent-color);
             position: relative;
             cursor: pointer;
+            border: 2px solid transparent;
+            background-image: 
+                linear-gradient(var(--white), var(--white)),
+                linear-gradient(90deg, var(--accent-color), #00b8db, var(--accent-color));
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+            animation: borderRotate 3s linear infinite;
+        }
+
+        @keyframes borderRotate {
+            0% {
+                filter: hue-rotate(0deg) brightness(1);
+            }
+            50% {
+                filter: hue-rotate(20deg) brightness(1.2);
+            }
+            100% {
+                filter: hue-rotate(0deg) brightness(1);
+            }
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0, 212, 255, 0.3);
+            animation: borderRotate 1.5s linear infinite, cardGlow 1.5s ease-in-out infinite;
+        }
+
+        @keyframes cardGlow {
+            0%, 100% {
+                box-shadow: 
+                    0 15px 40px rgba(0, 212, 255, 0.3),
+                    0 0 20px rgba(0, 212, 255, 0.4);
+            }
+            50% {
+                box-shadow: 
+                    0 15px 40px rgba(0, 212, 255, 0.5),
+                    0 0 30px rgba(0, 212, 255, 0.6);
+            }
         }
 
         .benefit-card:hover {
@@ -1154,7 +1208,7 @@
     <section id="home" class="hero">
         <div class="container">
             <div class="hero-content fade-in-up">
-                <h1>Turn Manual Work Into AI Agents That Run Your Business.</h1>
+                <h1>Turn Manual Work Into <span style="color: var(--accent-color);">AI Agents</span> That Run Your Business.</h1>
                 
                 <div class="hero-subheading">
                     <ul>
@@ -1165,7 +1219,7 @@
                     </ul>
                 </div>
 
-                <div class="video-container">
+                <div class="video-container" id="demoVideo">
                     <div class="video-placeholder">
                         <i class="fas fa-play-circle"></i>
                         <p>AI Agents-In-Action: Watch an AI agent handling a complex customer return autonomously</p>
@@ -1349,9 +1403,9 @@
         <div class="container">
             <div class="consultancy-content">
                 <h2>Not Sure Where AI Fits?</h2>
-                <p>Book a 15-min AI Roadmap Session with our founder.</p>
+                <p>Book a 15-min AI Roadmap Session with our experts.</p>
                 <div class="consultancy-cta">
-                    <a href="javascript:void(0)" onclick="openRoadmapModal()" class="btn-white tooltip" data-tooltip="Watch AI agents in action">See the AI Agentic Coworkers in Action</a>
+                    <a href="javascript:void(0)" onclick="scrollToVideo()" class="btn-white tooltip" data-tooltip="Watch AI agents in action">See the AI Agentic Coworkers in Action</a>
                     <a href="javascript:void(0)" onclick="openRoadmapModal()" class="btn-outline tooltip" data-tooltip="Schedule your strategy audit">Book your 15-minute AI Roadmap Audit</a>
                 </div>
             </div>
@@ -1514,7 +1568,7 @@
             <button class="modal-close" onclick="closeRoadmapModal()">&times;</button>
             <div class="modal-header">
                 <h2>Book Your 15-Min AI Roadmap</h2>
-                <p>Let's identify the perfect AI solution for your business</p>
+                <p>Let's identify the perfect AI solution for your business with our experts</p>
             </div>
             
             <div id="roadmapFormMessage"></div>
@@ -1711,6 +1765,24 @@
             document.getElementById('roadmapFormMessage').innerHTML = '';
         }
 
+        // Scroll to Video Function
+        function scrollToVideo() {
+            const videoElement = document.getElementById('demoVideo');
+            if (videoElement) {
+                videoElement.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+                
+                // Add a subtle highlight effect
+                videoElement.style.transition = 'transform 0.3s ease';
+                videoElement.style.transform = 'scale(1.02)';
+                setTimeout(() => {
+                    videoElement.style.transform = 'scale(1)';
+                }, 300);
+            }
+        }
+
         // Close modal on overlay click
         document.getElementById('waitlistModal').addEventListener('click', function(e) {
             if (e.target === this) {
@@ -1763,6 +1835,9 @@
                 
                 const data = await response.json();
                 
+                // Scroll to top of modal to show message
+                document.querySelector('#waitlistModal .modal-content').scrollTop = 0;
+                
                 if (response.ok) {
                     // Success
                     formMessage.innerHTML = `
@@ -1788,6 +1863,8 @@
                 }
             } catch (error) {
                 console.error('Error:', error);
+                // Scroll to top of modal to show error
+                document.querySelector('#waitlistModal .modal-content').scrollTop = 0;
                 formMessage.innerHTML = `
                     <div class="form-message error">
                         <i class="fas fa-exclamation-circle"></i>
@@ -1841,36 +1918,52 @@
                 
                 const data = await response.json();
                 
+                // Scroll to top of modal smoothly to show message
+                const modalContent = document.querySelector('#roadmapModal .modal-content');
+                modalContent.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+                
                 if (response.ok) {
                     // Success
                     formMessage.innerHTML = `
                         <div class="form-message success">
                             <i class="fas fa-check-circle"></i>
-                            ${data.message || 'Successfully booked your AI Roadmap session!'}
-                            ${data.top_priority_agent ? `<br><small>Recommended: ${data.top_priority_agent}</small>` : ''}
+                            <strong>Success!</strong><br>
+                            ${data.message || 'Successfully booked your AI Roadmap session! We will get back to you soon.'}
+                            ${data.top_priority_agent ? `<br><br><strong>Recommended Solution:</strong> ${data.top_priority_agent}` : ''}
                         </div>
                     `;
                     document.getElementById('roadmapForm').reset();
                     
-                    // Close modal after 3 seconds
+                    // Close modal after 4 seconds
                     setTimeout(() => {
                         closeRoadmapModal();
-                    }, 3000);
+                    }, 4000);
                 } else {
                     // Error from server
                     formMessage.innerHTML = `
                         <div class="form-message error">
                             <i class="fas fa-exclamation-circle"></i>
+                            <strong>Error!</strong><br>
                             ${data.detail || 'Failed to submit booking. Please try again.'}
                         </div>
                     `;
                 }
             } catch (error) {
                 console.error('Error:', error);
+                // Scroll to top of modal smoothly to show error
+                const modalContent = document.querySelector('#roadmapModal .modal-content');
+                modalContent.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
                 formMessage.innerHTML = `
                     <div class="form-message error">
                         <i class="fas fa-exclamation-circle"></i>
-                        Network error. Please check your connection and try again.
+                        <strong>Network Error!</strong><br>
+                        Please check your connection and try again.
                     </div>
                 `;
             } finally {
