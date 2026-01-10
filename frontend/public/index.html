@@ -1846,36 +1846,52 @@
                 
                 const data = await response.json();
                 
+                // Scroll to top of modal smoothly to show message
+                const modalContent = document.querySelector('#roadmapModal .modal-content');
+                modalContent.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+                
                 if (response.ok) {
                     // Success
                     formMessage.innerHTML = `
                         <div class="form-message success">
                             <i class="fas fa-check-circle"></i>
-                            ${data.message || 'Successfully booked your AI Roadmap session!'}
-                            ${data.top_priority_agent ? `<br><small>Recommended: ${data.top_priority_agent}</small>` : ''}
+                            <strong>Success!</strong><br>
+                            ${data.message || 'Successfully booked your AI Roadmap session! We will get back to you soon.'}
+                            ${data.top_priority_agent ? `<br><br><strong>Recommended Solution:</strong> ${data.top_priority_agent}` : ''}
                         </div>
                     `;
                     document.getElementById('roadmapForm').reset();
                     
-                    // Close modal after 3 seconds
+                    // Close modal after 4 seconds
                     setTimeout(() => {
                         closeRoadmapModal();
-                    }, 3000);
+                    }, 4000);
                 } else {
                     // Error from server
                     formMessage.innerHTML = `
                         <div class="form-message error">
                             <i class="fas fa-exclamation-circle"></i>
+                            <strong>Error!</strong><br>
                             ${data.detail || 'Failed to submit booking. Please try again.'}
                         </div>
                     `;
                 }
             } catch (error) {
                 console.error('Error:', error);
+                // Scroll to top of modal smoothly to show error
+                const modalContent = document.querySelector('#roadmapModal .modal-content');
+                modalContent.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
                 formMessage.innerHTML = `
                     <div class="form-message error">
                         <i class="fas fa-exclamation-circle"></i>
-                        Network error. Please check your connection and try again.
+                        <strong>Network Error!</strong><br>
+                        Please check your connection and try again.
                     </div>
                 `;
             } finally {
