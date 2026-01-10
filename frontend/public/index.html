@@ -1801,47 +1801,7 @@
             }
         }
 
-        // Update all "Join Waitlist" links to open modal
-        document.addEventListener('DOMContentLoaded', function() {
-            const waitlistLinks = document.querySelectorAll('a[href="#waitlist"]');
-            waitlistLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    openWaitlistModal();
-                });
-            });
-
-            // Add event listeners for roadmap modal
-            const roadmapLinks = document.querySelectorAll('a[href="#audit"]');
-            roadmapLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    openRoadmapModal();
-                });
-            });
-        });
-
-        // Roadmap Modal Functions
-        function openRoadmapModal() {
-            document.getElementById('roadmapModal').classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeRoadmapModal() {
-            document.getElementById('roadmapModal').classList.remove('active');
-            document.body.style.overflow = 'auto';
-            document.getElementById('roadmapForm').reset();
-            document.getElementById('roadmapFormMessage').innerHTML = '';
-        }
-
-        // Close roadmap modal on overlay click
-        document.getElementById('roadmapModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeRoadmapModal();
-            }
-        });
-
-        // Roadmap form submission
+        // Form submission
         async function submitRoadmap(event) {
             event.preventDefault();
             
