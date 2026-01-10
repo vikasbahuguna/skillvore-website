@@ -1214,7 +1214,65 @@
     <header>
         <nav class="container">
             <a href="#home" class="logo tooltip" data-tooltip="SkillVore - AI Solutions Expert">
-                <i class="fas fa-brain"></i>
+                <svg width="40" height="40" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="margin-right: 0.5rem;">
+                    <!-- Circuit Brain SVG -->
+                    <defs>
+                        <linearGradient id="brainGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#00d4ff;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#00b8db;stop-opacity:1" />
+                        </linearGradient>
+                        <filter id="glow">
+                            <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                            <feMerge>
+                                <feMergeNode in="coloredBlur"/>
+                                <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                        </filter>
+                    </defs>
+                    
+                    <!-- Left Brain Hemisphere -->
+                    <path d="M 30 20 Q 20 25, 20 35 Q 20 50, 25 60 Q 30 70, 35 75 L 45 75 Q 45 65, 45 50 Q 45 35, 40 25 Q 35 20, 30 20 Z" 
+                          fill="url(#brainGradient)" opacity="0.9" filter="url(#glow)"/>
+                    
+                    <!-- Right Brain Hemisphere -->
+                    <path d="M 70 20 Q 80 25, 80 35 Q 80 50, 75 60 Q 70 70, 65 75 L 55 75 Q 55 65, 55 50 Q 55 35, 60 25 Q 65 20, 70 20 Z" 
+                          fill="url(#brainGradient)" opacity="0.9" filter="url(#glow)"/>
+                    
+                    <!-- Center Connection -->
+                    <rect x="45" y="40" width="10" height="20" fill="url(#brainGradient)" opacity="0.8"/>
+                    
+                    <!-- Circuit Lines -->
+                    <line x1="25" y1="35" x2="15" y2="35" stroke="#00d4ff" stroke-width="2" opacity="0.8"/>
+                    <circle cx="13" cy="35" r="2" fill="#00d4ff"/>
+                    
+                    <line x1="30" y1="50" x2="15" y2="55" stroke="#00d4ff" stroke-width="2" opacity="0.8"/>
+                    <circle cx="13" cy="56" r="2" fill="#00d4ff"/>
+                    
+                    <line x1="75" y1="35" x2="85" y2="35" stroke="#00d4ff" stroke-width="2" opacity="0.8"/>
+                    <circle cx="87" cy="35" r="2" fill="#00d4ff"/>
+                    
+                    <line x1="70" y1="50" x2="85" y2="55" stroke="#00d4ff" stroke-width="2" opacity="0.8"/>
+                    <circle cx="87" cy="56" r="2" fill="#00d4ff"/>
+                    
+                    <!-- Neural Nodes -->
+                    <circle cx="30" cy="30" r="3" fill="#00d4ff" opacity="0.9"/>
+                    <circle cx="40" cy="40" r="3" fill="#00d4ff" opacity="0.9"/>
+                    <circle cx="35" cy="55" r="3" fill="#00d4ff" opacity="0.9"/>
+                    
+                    <circle cx="70" cy="30" r="3" fill="#00d4ff" opacity="0.9"/>
+                    <circle cx="60" cy="40" r="3" fill="#00d4ff" opacity="0.9"/>
+                    <circle cx="65" cy="55" r="3" fill="#00d4ff" opacity="0.9"/>
+                    
+                    <!-- Center Neural Connection -->
+                    <circle cx="50" cy="45" r="4" fill="#00d4ff" opacity="1"/>
+                    
+                    <!-- Bottom Circuit Elements -->
+                    <line x1="40" y1="75" x2="40" y2="85" stroke="#00d4ff" stroke-width="2" opacity="0.7"/>
+                    <circle cx="40" cy="87" r="2" fill="#00d4ff"/>
+                    
+                    <line x1="60" y1="75" x2="60" y2="85" stroke="#00d4ff" stroke-width="2" opacity="0.7"/>
+                    <circle cx="60" cy="87" r="2" fill="#00d4ff"/>
+                </svg>
                 SkillVore
             </a>
             <ul class="nav-links">
