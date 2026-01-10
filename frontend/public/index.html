@@ -1763,6 +1763,9 @@
                 
                 const data = await response.json();
                 
+                // Scroll to top of modal to show message
+                document.querySelector('#waitlistModal .modal-content').scrollTop = 0;
+                
                 if (response.ok) {
                     // Success
                     formMessage.innerHTML = `
@@ -1788,6 +1791,8 @@
                 }
             } catch (error) {
                 console.error('Error:', error);
+                // Scroll to top of modal to show error
+                document.querySelector('#waitlistModal .modal-content').scrollTop = 0;
                 formMessage.innerHTML = `
                     <div class="form-message error">
                         <i class="fas fa-exclamation-circle"></i>
