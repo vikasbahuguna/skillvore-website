@@ -114,6 +114,21 @@
             font-size: 2rem;
         }
 
+        /* Logo Glow Animation */
+        .logo svg {
+            animation: logoGlow 2s ease-in-out infinite;
+            filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.6));
+        }
+
+        @keyframes logoGlow {
+            0%, 100% {
+                filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.6)) drop-shadow(0 0 12px rgba(0, 212, 255, 0.3));
+            }
+            50% {
+                filter: drop-shadow(0 0 15px rgba(0, 212, 255, 0.9)) drop-shadow(0 0 25px rgba(0, 212, 255, 0.5)) drop-shadow(0 0 35px rgba(0, 212, 255, 0.3));
+            }
+        }
+
         .nav-links {
             display: flex;
             list-style: none;
@@ -1213,8 +1228,112 @@
     <!-- Header -->
     <header>
         <nav class="container">
-            <a href="#home" class="logo tooltip" data-tooltip="SkillVore - AI Solutions Expert">
-                <i class="fas fa-brain"></i>
+            <a href="#home" class="logo tooltip" data-tooltip="SkillVore - AI Solutions Expert" data-testid="logo-link">
+                <svg width="42" height="42" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="margin-right: 0.5rem;">
+                    <!-- Circuit Brain Logo - SkillVore -->
+                    <defs>
+                        <linearGradient id="brainGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#00e5ff;stop-opacity:1" />
+                            <stop offset="50%" style="stop-color:#00d4ff;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#0099cc;stop-opacity:1" />
+                        </linearGradient>
+                        <linearGradient id="circuitGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:#00d4ff;stop-opacity:0.6" />
+                            <stop offset="100%" style="stop-color:#00d4ff;stop-opacity:1" />
+                        </linearGradient>
+                        <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+                            <feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>
+                            <feMerge>
+                                <feMergeNode in="coloredBlur"/>
+                                <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                        </filter>
+                        <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+                            <feGaussianBlur stdDeviation="1.5" result="blur"/>
+                            <feMerge>
+                                <feMergeNode in="blur"/>
+                                <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                        </filter>
+                    </defs>
+                    
+                    <!-- Brain Outline - Left Hemisphere -->
+                    <path d="M 48 18 
+                             C 38 18, 28 22, 24 32 
+                             C 20 42, 18 48, 20 58 
+                             C 22 68, 28 78, 38 82 
+                             C 43 84, 48 84, 50 82" 
+                          fill="none" stroke="url(#brainGradient)" stroke-width="3" 
+                          stroke-linecap="round" filter="url(#glow)"/>
+                    
+                    <!-- Brain Outline - Right Hemisphere -->
+                    <path d="M 52 18 
+                             C 62 18, 72 22, 76 32 
+                             C 80 42, 82 48, 80 58 
+                             C 78 68, 72 78, 62 82 
+                             C 57 84, 52 84, 50 82" 
+                          fill="none" stroke="url(#brainGradient)" stroke-width="3" 
+                          stroke-linecap="round" filter="url(#glow)"/>
+                    
+                    <!-- Brain Folds - Left -->
+                    <path d="M 28 38 Q 35 42, 42 38" fill="none" stroke="#00d4ff" stroke-width="2" opacity="0.7" stroke-linecap="round"/>
+                    <path d="M 25 52 Q 34 48, 40 52" fill="none" stroke="#00d4ff" stroke-width="2" opacity="0.7" stroke-linecap="round"/>
+                    <path d="M 30 65 Q 38 62, 44 68" fill="none" stroke="#00d4ff" stroke-width="2" opacity="0.7" stroke-linecap="round"/>
+                    
+                    <!-- Brain Folds - Right -->
+                    <path d="M 72 38 Q 65 42, 58 38" fill="none" stroke="#00d4ff" stroke-width="2" opacity="0.7" stroke-linecap="round"/>
+                    <path d="M 75 52 Q 66 48, 60 52" fill="none" stroke="#00d4ff" stroke-width="2" opacity="0.7" stroke-linecap="round"/>
+                    <path d="M 70 65 Q 62 62, 56 68" fill="none" stroke="#00d4ff" stroke-width="2" opacity="0.7" stroke-linecap="round"/>
+                    
+                    <!-- Central Neural Pathway -->
+                    <line x1="50" y1="24" x2="50" y2="78" stroke="#00d4ff" stroke-width="2" opacity="0.5"/>
+                    
+                    <!-- Circuit Nodes - Primary (larger, glowing) -->
+                    <circle cx="50" cy="35" r="5" fill="#00d4ff" filter="url(#softGlow)">
+                        <animate attributeName="opacity" values="0.8;1;0.8" dur="2s" repeatCount="indefinite"/>
+                    </circle>
+                    <circle cx="50" cy="55" r="5" fill="#00d4ff" filter="url(#softGlow)">
+                        <animate attributeName="opacity" values="1;0.8;1" dur="2s" repeatCount="indefinite"/>
+                    </circle>
+                    
+                    <!-- Circuit Nodes - Secondary Left -->
+                    <circle cx="32" cy="35" r="3.5" fill="#00d4ff" opacity="0.9"/>
+                    <circle cx="28" cy="52" r="3.5" fill="#00d4ff" opacity="0.9"/>
+                    <circle cx="35" cy="68" r="3.5" fill="#00d4ff" opacity="0.9"/>
+                    
+                    <!-- Circuit Nodes - Secondary Right -->
+                    <circle cx="68" cy="35" r="3.5" fill="#00d4ff" opacity="0.9"/>
+                    <circle cx="72" cy="52" r="3.5" fill="#00d4ff" opacity="0.9"/>
+                    <circle cx="65" cy="68" r="3.5" fill="#00d4ff" opacity="0.9"/>
+                    
+                    <!-- Circuit Connections - Horizontal -->
+                    <line x1="32" y1="35" x2="50" y2="35" stroke="url(#circuitGradient)" stroke-width="1.5" opacity="0.8"/>
+                    <line x1="50" y1="35" x2="68" y2="35" stroke="url(#circuitGradient)" stroke-width="1.5" opacity="0.8"/>
+                    
+                    <line x1="28" y1="52" x2="50" y2="55" stroke="url(#circuitGradient)" stroke-width="1.5" opacity="0.7"/>
+                    <line x1="50" y1="55" x2="72" y2="52" stroke="url(#circuitGradient)" stroke-width="1.5" opacity="0.7"/>
+                    
+                    <line x1="35" y1="68" x2="50" y2="55" stroke="url(#circuitGradient)" stroke-width="1.5" opacity="0.6"/>
+                    <line x1="50" y1="55" x2="65" y2="68" stroke="url(#circuitGradient)" stroke-width="1.5" opacity="0.6"/>
+                    
+                    <!-- External Circuit Extensions - Left -->
+                    <line x1="32" y1="35" x2="14" y2="30" stroke="#00d4ff" stroke-width="1.5" opacity="0.6"/>
+                    <circle cx="12" cy="29" r="2.5" fill="#00d4ff" opacity="0.8"/>
+                    
+                    <line x1="28" y1="52" x2="12" y2="52" stroke="#00d4ff" stroke-width="1.5" opacity="0.6"/>
+                    <circle cx="10" cy="52" r="2.5" fill="#00d4ff" opacity="0.8"/>
+                    
+                    <!-- External Circuit Extensions - Right -->
+                    <line x1="68" y1="35" x2="86" y2="30" stroke="#00d4ff" stroke-width="1.5" opacity="0.6"/>
+                    <circle cx="88" cy="29" r="2.5" fill="#00d4ff" opacity="0.8"/>
+                    
+                    <line x1="72" y1="52" x2="88" y2="52" stroke="#00d4ff" stroke-width="1.5" opacity="0.6"/>
+                    <circle cx="90" cy="52" r="2.5" fill="#00d4ff" opacity="0.8"/>
+                    
+                    <!-- Top Circuit Extension -->
+                    <line x1="50" y1="18" x2="50" y2="8" stroke="#00d4ff" stroke-width="1.5" opacity="0.7"/>
+                    <circle cx="50" cy="6" r="2.5" fill="#00d4ff" opacity="0.9"/>
+                </svg>
                 SkillVore
             </a>
             <ul class="nav-links">
