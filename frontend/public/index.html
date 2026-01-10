@@ -227,10 +227,29 @@
             backdrop-filter: blur(10px);
             padding: 2rem 2.5rem;
             border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
             transition: all 0.4s ease;
             cursor: pointer;
+            position: relative;
+            border: 2px solid transparent;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.15)),
+                linear-gradient(90deg, var(--accent-color), #00b8db, var(--accent-color));
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+            animation: heroGlowBorder 3s linear infinite;
+        }
+
+        @keyframes heroGlowBorder {
+            0% {
+                filter: hue-rotate(0deg) brightness(1) drop-shadow(0 0 10px rgba(0, 212, 255, 0.5));
+            }
+            50% {
+                filter: hue-rotate(20deg) brightness(1.2) drop-shadow(0 0 20px rgba(0, 212, 255, 0.8));
+            }
+            100% {
+                filter: hue-rotate(0deg) brightness(1) drop-shadow(0 0 10px rgba(0, 212, 255, 0.5));
+            }
         }
 
         .hero h1:hover {
@@ -238,9 +257,7 @@
             backdrop-filter: blur(15px);
             transform: translateY(-10px) scale(1.02);
             box-shadow: 0 15px 50px rgba(0, 212, 255, 0.4);
-            border: 1px solid rgba(0, 212, 255, 0.5);
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 
-                         2px 2px 4px rgba(0, 0, 0, 0.3);
+            animation: heroGlowBorder 1.5s linear infinite;
         }
 
         .hero h2 {
